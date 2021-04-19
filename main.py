@@ -1,6 +1,15 @@
 import argparse
 from scripts import model_funcs as mf
 
+def main(args):
+    if args.test == 'hh':
+        mf.test_func(args.test)
+    if args.download_data is None:
+        mf.download_data()
+    elif args.download_data is not None:
+        mf.download_data(args.download_data)
+    if args.unzip is not None:
+        mf.unzip()
 
 
 if __name__ == "__main__":
@@ -13,14 +22,7 @@ if __name__ == "__main__":
     parser.add_argument("--optimiser")
     args = parser.parse_args()
     print(args)
-    if args.test == 'hh':
-        mf.test_func(args.test)
-    if args.download_data is None:
-        mf.download_data()
-    elif args.download_data is not None:
-        mf.download_data(args.download_data)
-    if args.unzip is not None:
-        mf.unzip()
+    main(args)
     # --train --epochs 2
     # --optimizer str()
     # --load-weights Path()

@@ -8,4 +8,4 @@ nav:
     - Home: index.md
     - Data: data.md
     - Run: running.md
-theme: readthedocs
+
