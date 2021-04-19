@@ -1,0 +1,11 @@
+site_name: Full Stack Week
+theme:
+   name: material
+   language: en
+plugins:
+  - search
+nav:
+    - Home: index.md
+    - Data: data.md
+    - Run: running.md
+theme: readthedocs
