@@ -3,6 +3,7 @@ import requests
 from threading import Thread
 from flask import Flask, jsonify, render_template, request
 from scripts import database as db
+import pickle
 
 app1 = Flask("app1")
 logged_in = False
@@ -45,18 +46,13 @@ def reg_user():
     return render_template("login.html")
 
 
-@app1.route("/submit", methods=["GET"])
-def sub():
-    return render_template("img_form.html")
-
-
-@app1.route("/submit", methods=["POST"])
+@app1.route("/submit", methods=["POST", "GET"])
 def post_image():
-
+    if request.method == "GET":
+        return render_template("img_form.html")
     if request.method == "POST":
         file = request.files["file"]
         img_bytes = file.read()
-
         r = requests.post("http://127.0.0.1:5000/predict", files={"file": img_bytes})
 
         r.raise_for_status()
@@ -65,4 +61,4 @@ def post_image():
 
 
 if __name__ == "__main__":
-    app1.run(debug=True)
+    app1.run(port=5001)

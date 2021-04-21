@@ -3,7 +3,7 @@ from os.path import join, dirname
 import pymongo
 import urllib
 from dotenv import load_dotenv, find_dotenv
-
+from scripts import hashing as ha
 
 load_dotenv(find_dotenv())
 
@@ -23,6 +23,8 @@ def add_data_to_db(fd):
     db = connect_to_db()
     col = db.users
     di = fd
+    di["pwd"] = ha.hash_password(di["pwd"])
+    di["email"] = di["email"].lower()
     x = col.insert_one(di)
     print(x)
     return
@@ -31,10 +33,10 @@ def add_data_to_db(fd):
 def find_user(loginDict):
     db = connect_to_db()
     col = db.users
-    x = col.find_one({"email": loginDict["email"]})
+    x = col.find_one({"email": loginDict["email"].lower()})
     print("X is", x)
     if x:
-        if x["pwd"] == loginDict["pwd"]:
+        if ha.verify_password(x["pwd"], loginDict["pwd"]):
             return True
         else:
             return False

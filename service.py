@@ -112,9 +112,7 @@ def start_app2():
 
 
 if __name__ == "__main__":
-    if os.environ.get("WERKZEUG_RUN_MAIN") != "true":
-        Thread(target=start_app1).start()
-    start_app2()
+    app2.run()
 
 
 # run with

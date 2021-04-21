@@ -22,6 +22,7 @@ import requests
 import zipfile
 
 from dotenv import load_dotenv
+import pickle
 
 load_dotenv(".env")
 
@@ -61,13 +62,13 @@ def get_dataloaders():
         ),
     }
 
-    data_dir = "../data/hymenoptera_data"
+    data_dir = "data/hymenoptera_data"
     image_datasets = {
         x: datasets.ImageFolder(os.path.join(data_dir, x), data_transforms[x])
         for x in ["train", "val"]
     }
 
-    with open("../assets/class2idx.json", "w") as f:
+    with open("assets/class2idx.json", "w") as f:
         f.write(json.dumps(image_datasets["train"].class_to_idx))
 
     dataloaders = {
@@ -163,7 +164,7 @@ def train_model(model, criterion, optimizer, scheduler, num_epochs=10):
 
     # load best model weights
     model.load_state_dict(best_model_wts)
-    torch.save(model.state_dict(), "best_model.pth")
+    torch.save(model.state_dict(), "models/best_model.pth")
     return model
 
 
@@ -198,7 +199,10 @@ def create_model(weights=None, epochs=5, optimizer="sgd"):
     elif optimizer == "adam":
 
         optimizer_conv = optim.Adam(
-            model_conv.fc.parameters(), lr=0.001, weight_decay=0.01, eps=1e-5,
+            model_conv.fc.parameters(),
+            lr=0.001,
+            weight_decay=0.01,
+            eps=1e-5,
         )
     else:
         print("Sorry I can't use that optmizer")
