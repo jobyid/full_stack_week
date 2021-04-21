@@ -42,8 +42,9 @@ def reg_user():
             f"The URL /reg is accessed directly. Try going to '/signup' to submit form"
         )
     if request.method == "POST":
-        db.add_data_to_db(request.form.to_dict())
-    return render_template("login.html")
+        if db.add_data_to_db(request.form.to_dict()):
+            return render_template("login.html")
+    return render_template("login.html", bad_login="Email already registered")
 
 
 @app1.route("/submit", methods=["POST", "GET"])

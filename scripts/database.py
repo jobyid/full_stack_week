@@ -22,12 +22,21 @@ def connect_to_db():
 def add_data_to_db(fd):
     db = connect_to_db()
     col = db.users
-    di = fd
-    di["pwd"] = ha.hash_password(di["pwd"])
-    di["email"] = di["email"].lower()
-    x = col.insert_one(di)
-    print(x)
-    return
+    if not check_if_email_already_there(col, fd["email"]):
+        di = fd
+        di["pwd"] = ha.hash_password(di["pwd"])
+        di["email"] = di["email"].lower()
+        col.insert_one(di)
+        return True
+    return False
+
+
+def check_if_email_already_there(col, email):
+    x = col.find_one({"email": email.lower()})
+    if x:
+        return True
+    else:
+        return False
 
 
 def find_user(loginDict):
